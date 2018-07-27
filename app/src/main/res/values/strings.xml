@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">love2gether</string>
     <string name="menu_profile">Профиль</string>
+    <string name="appbar_name">LOVE2GETHER</string>
 </resources>
