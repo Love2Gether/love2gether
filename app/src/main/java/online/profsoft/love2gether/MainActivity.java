@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import online.profsoft.love2gether.databinding.ActivityMainBinding;
+import online.profsoft.love2gether.message.DialogFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
                case R.id.action_swipecard:
                    return true;
                case R.id.action_chat:
+                   getFragmentManager()
+                           .beginTransaction()
+                           .replace(R.id.container, new DialogFragment())
+                           .commit();
                    return true;
                case R.id.action_profile:
                    return true;
