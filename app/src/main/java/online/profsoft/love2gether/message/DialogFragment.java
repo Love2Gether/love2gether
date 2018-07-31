@@ -1,10 +1,8 @@
 package online.profsoft.love2gether.message;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +14,8 @@ import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
-import online.profsoft.love2gether.MainActivity;
 import online.profsoft.love2gether.R;
 import online.profsoft.love2gether.databinding.FragmentDialogBinding;
 import online.profsoft.love2gether.models.Dialog;

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1026535677650",
+    "firebase_url": "https://love2gether-e3c4d.firebaseio.com",
+    "project_id": "love2gether-e3c4d",
+    "storage_bucket": "love2gether-e3c4d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026535677650:android:0dc92b1197b731a3",
+        "android_client_info": {
+          "package_name": "online.profsoft.love2gether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1026535677650-0d13f8v3bd7o6tig1bo66rflfie2jkpc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-bYXsLPFJ4aJN6hfqtGAzZ-B5sABxok0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,7 +9,6 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import online.profsoft.love2gether.R;
 import online.profsoft.love2gether.databinding.ActivityMessageBinding;
