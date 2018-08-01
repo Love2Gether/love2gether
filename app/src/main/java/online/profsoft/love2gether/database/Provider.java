@@ -101,10 +101,14 @@ public class Provider {
         public void onResponse(ArrayList<T> models);
     }
 
-    public void getUser(String userId, FireBaseResponse<User> user, ResponseOnError onError) {
-        getServerOnce(database.getReference(USERS + userId), dataSnapshot -> {
-            user.onResponse(dataSnapshot.getValue(User.class));
-        }, onError);
+    public void getUser(FireBaseResponseList<User> user) {
+        getServerOnce(database.getReference(USERS), dataSnapshot -> {
+            ArrayList<User> users = new ArrayList<>();
+            for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                users.add(postSnapshot.getValue(User.class));
+            }
+            user.onResponse(users);
+        });
     }
 
     public void getUser(String userId, FireBaseResponse<User> user) {

@@ -2,10 +2,9 @@ package online.profsoft.love2gether.login;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import online.profsoft.love2gether.BaseActivity;
+import online.profsoft.love2gether.Start.BaseActivity;
 import online.profsoft.love2gether.MainActivity;
 import online.profsoft.love2gether.MyApplication;
 import online.profsoft.love2gether.R;
@@ -30,10 +29,12 @@ public class RegistryActivity extends BaseActivity {
         }
 
         binding.button.setOnClickListener(view -> {
-            if (binding.name.getText().toString().equals(""))
+            if (binding.name.getText().toString().equals("")) {
+                showToast("Заполните все поля");
                 return;
+            }
             String name = binding.name.getText().toString();
-            User registerUser = new User(firebaseUser.getUid(), name, null);
+            User registerUser = new User(firebaseUser.getUid(), name, "https://www.gstatic.com/webp/gallery/4.sm.jpg");
 
             Provider.getInstance().setUser(registerUser);
             MyApplication.getInstance().setUser(registerUser);

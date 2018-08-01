@@ -1,4 +1,4 @@
-package online.profsoft.love2gether;
+package online.profsoft.love2gether.Start;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import online.profsoft.love2gether.R;
 import online.profsoft.love2gether.login.LoginActivity;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -61,7 +62,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void signOut() {
         // Firebase sign out
         firebaseAuth.signOut();
-
         // Google sign out
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(status -> {
             startActivity(new Intent(this, LoginActivity.class));
