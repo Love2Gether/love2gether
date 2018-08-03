@@ -1,5 +1,6 @@
 package online.profsoft.love2gether.database;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -10,6 +11,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import online.profsoft.love2gether.models.Dialog;
+import online.profsoft.love2gether.models.Message;
 import online.profsoft.love2gether.models.User;
 
 
@@ -17,8 +20,7 @@ public class Provider {
     private static Provider instance;
     private FirebaseDatabase database;
     private String USERS = "/users/";
-    private String DIALOG = "/dialog/";
-    private String MESSAGE = "/dialog/message/";
+    private String DIALOGS = "/dialogs/";
 
     public static Provider getInstance() {
         if (instance != null) return instance;
@@ -93,6 +95,36 @@ public class Provider {
         });
     }
 
+    private void getServerAddChildListener(Query reference, ResponseOnComplete onCompleteAdd, ResponseOnComplete onCompleteChange) {
+        reference.addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                onCompleteAdd.run(dataSnapshot);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                onCompleteChange.run(dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public interface FireBaseResponse<T> {
         public void onResponse(T model);
     }
@@ -120,4 +152,92 @@ public class Provider {
         database.getReference(USERS + user.getId()).setValue(user);
     }
 
+    public void getDialogs(String userID, FireBaseResponseList<Dialog> dialogFireBaseResponseList) {
+        ArrayList<Dialog> dialogs = new ArrayList<>();
+        getServerOnce(database.getReference(DIALOGS)
+                        .orderByChild("userId1").equalTo(userID),
+                dataSnapshot -> {
+                    for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                        dialogs.add(postSnapshot.getValue(Dialog.class));
+                    }
+                    dialogFireBaseResponseList.onResponse(dialogs);
+                });
+        getServerOnce(database.getReference(DIALOGS)
+                        .orderByChild("userId2").equalTo(userID),
+                dataSnapshot -> {
+                    for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                        dialogs.add(postSnapshot.getValue(Dialog.class));
+                    }
+                    dialogFireBaseResponseList.onResponse(dialogs);
+                });
+    }
+    public void getDialogID(String dialogId, FireBaseResponse<Dialog> dialogFireBaseResponse) {
+        getServerOnce(database.getReference(DIALOGS + dialogId), dataSnapshot -> {
+            dialogFireBaseResponse.onResponse(dataSnapshot.getValue(Dialog.class));
+        });
+    }
+
+    public void getDialog(String userID1, String userID2 , FireBaseResponse<Dialog> dialogFireBaseResponseList) {
+        getServerOnce(database.getReference(DIALOGS)
+                        .orderByChild("userId1").equalTo(userID1),
+                dataSnapshot -> {
+                    dialogFireBaseResponseList.onResponse (dataSnapshot.getValue(Dialog.class));
+
+                });
+        getServerOnce(database.getReference(DIALOGS)
+                        .orderByChild("userId2").equalTo(userID2),
+                dataSnapshot -> {
+                    dialogFireBaseResponseList.onResponse (dataSnapshot.getValue(Dialog.class));
+                });
+        getServerOnce(database.getReference(DIALOGS)
+                        .orderByChild("userId1").equalTo(userID2),
+                dataSnapshot -> {
+                    dialogFireBaseResponseList.onResponse (dataSnapshot.getValue(Dialog.class));
+
+                });
+        getServerOnce(database.getReference(DIALOGS)
+                        .orderByChild("userId2").equalTo(userID1),
+                dataSnapshot -> {
+                    dialogFireBaseResponseList.onResponse (dataSnapshot.getValue(Dialog.class));
+                });
+    }
+
+    public void setDialog(Dialog dialog) {
+        database.getReference(DIALOGS + dialog.getId()).setValue(dialog);
+    }
+
+    public void getDialogsByUserId(String userID, FireBaseResponse<Dialog> dialogAdd, FireBaseResponse<Dialog> dialogChange) {
+
+        getServerAddChildListener(
+                database.getReference(DIALOGS)
+                        .orderByChild("userId1").equalTo(userID),
+                dataSnapshotAdd -> {
+                    dialogAdd.onResponse(dataSnapshotAdd.getValue(Dialog.class));
+                },
+                dataSnapshotChange -> {
+                    dialogChange.onResponse(dataSnapshotChange.getValue(Dialog.class));
+
+                });
+        getServerAddChildListener(
+                database.getReference(DIALOGS)
+                        .orderByChild("userId2").equalTo(userID),
+                dataSnapshotAdd -> {
+                    Dialog dialog = dataSnapshotAdd.getValue(Dialog.class);
+                    dialogAdd.onResponse(dialog);
+                },
+                dataSnapshotChange -> {
+                    Dialog dialog = dataSnapshotChange.getValue(Dialog.class);
+                    dialogChange.onResponse(dialog);
+                });
+    }
+    public void getMessage(String dialogId, FireBaseResponse<Message> messageFireBaseResponse) {
+
+        getServerAddChildListener(database.getReference(DIALOGS + dialogId + "/messages/"),
+                dataSnapshot -> {
+                    Message message = dataSnapshot.getValue(Message.class);
+                    messageFireBaseResponse.onResponse(message);
+                },
+                dataSnapshotChange -> {
+                });
+    }
 }

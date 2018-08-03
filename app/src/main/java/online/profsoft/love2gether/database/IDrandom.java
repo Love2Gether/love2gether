@@ -8,7 +8,12 @@ import java.util.Random;
 import online.profsoft.love2gether.MyApplication;
 
 public class IDrandom {
-
+    public static String generateStringID() {
+        String timeCreate = "" + MyApplication.getInstance().getTimeCreate();
+        String currentTime = "" + Calendar.getInstance().getTimeInMillis();
+        return "Android_" + getUniqueDeviceID() + "_" + timeCreate + "_" + currentTime +
+                "_" + randomString(5) + "-" + randomString(5) + "-" + randomString(5);
+    }
     private static String randomString(int n) {
         String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         int count = all.length();

@@ -10,7 +10,7 @@ import com.stfalcon.chatkit.commons.models.IUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dialog implements IDialog, Parcelable {
+public class Dialog implements IDialog {
 
     private String id;
     private String dialogPhoto;
@@ -19,31 +19,12 @@ public class Dialog implements IDialog, Parcelable {
     private Message lastMessage;
     private ArrayList<Message> messages;
     private int unreadCount;
+    private String userId1;
+    private String userId2;
 
-    protected Dialog(Parcel in) {
-        id = in.readString();
-        dialogPhoto = in.readString();
-        dialogName = in.readString();
-        unreadCount = in.readInt();
-        messages = in.readArrayList(new ClassLoader() {
-            @Override
-            public Class<?> loadClass(String name) throws ClassNotFoundException {
-                return super.loadClass(name);
-            }
-        });
+
+    public Dialog() {
     }
-
-    public static final Creator<Dialog> CREATOR = new Creator<Dialog>() {
-        @Override
-        public Dialog createFromParcel(Parcel in) {
-            return new Dialog(in);
-        }
-
-        @Override
-        public Dialog[] newArray(int size) {
-            return new Dialog[size];
-        }
-    };
 
     public ArrayList<Message> getMessages() {
         return messages;
@@ -57,6 +38,62 @@ public class Dialog implements IDialog, Parcelable {
         this.lastMessage = lastMessage;
         this.messages = messages;
         this.unreadCount = unreadCount;
+    }
+
+    public Dialog(String id, String dialogPhoto, String dialogName, ArrayList<User> users, Message lastMessage, ArrayList<Message> messages, int unreadCount, String userId1, String userId2) {
+        this.id = id;
+        this.dialogPhoto = dialogPhoto;
+        this.dialogName = dialogName;
+        this.users = users;
+        this.lastMessage = lastMessage;
+        this.messages = messages;
+        this.unreadCount = unreadCount;
+        this.userId1 = userId1;
+        this.userId2 = userId2;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDialogPhoto(String dialogPhoto) {
+        this.dialogPhoto = dialogPhoto;
+    }
+
+    public void setDialogName(String dialogName) {
+        this.dialogName = dialogName;
+    }
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+    }
+
+    public void setLastMessage(Message lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public void setMessages(ArrayList<Message> messages) {
+        this.messages = messages;
+    }
+
+    public void setUnreadCount(int unreadCount) {
+        this.unreadCount = unreadCount;
+    }
+
+    public String getUserId1() {
+        return userId1;
+    }
+
+    public void setUserId1(String userId1) {
+        this.userId1 = userId1;
+    }
+
+    public String getUserId2() {
+        return userId2;
+    }
+
+    public void setUserId2(String userId2) {
+        this.userId2 = userId2;
     }
 
     @Override
@@ -94,17 +131,4 @@ public class Dialog implements IDialog, Parcelable {
         return unreadCount;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(dialogPhoto);
-        dest.writeString(dialogName);
-        dest.writeInt(unreadCount);
-        dest.writeList(messages);
-    }
 }
