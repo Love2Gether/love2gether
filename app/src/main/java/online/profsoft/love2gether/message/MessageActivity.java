@@ -47,15 +47,8 @@ public class MessageActivity extends AppCompatActivity {
                     dial -> {
                         if (dial != null ) {
                             dialog = ReverseDialog.changeMyDialogInDialog(dial);
-                            adapter.addToEnd(dialog.getMessages(), false);
+                            adapter.addToEnd(dialog.getMessages(), true);
                         }
-// else
-//                            Provider.getInstance().getDialog( MyApplication.getInstance().getUser().getId() + id,
-//                                    dial2 -> {
-//                                        dialog = ReverseDialog.changeMyDialogInDialog(dial);
-//                                        adapter.addToEnd(dialog.getMessages(), false);
-//                                    });
-
                     });
         } else {
             id = getIntent().getStringExtra("dialogID");

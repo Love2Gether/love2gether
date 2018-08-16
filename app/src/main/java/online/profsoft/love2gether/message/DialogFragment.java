@@ -55,19 +55,19 @@ private DialogsListAdapter adapter;
                 dialogs.add(dialog);
             }
 
-//                    Collections.sort(dialogs, new Comparator<Dialog>() {
-//                        @Override
-//                        public int compare(Dialog o1, Dialog o2) {
-//                            long t1 = o1.getLastMessage().getCreatedAt().getTime();
-//                            long t2 = o2.getLastMessage().getCreatedAt().getTime();
-//                            if (t1 < t2)
-//                                return 1;
-//                            else if (t1 > t2)
-//                                return -1;
-//                            else
-//                                return 0;
-//                        }
-//                    });
+                    Collections.sort(dialogs, new Comparator<Dialog>() {
+                        @Override
+                        public int compare(Dialog o1, Dialog o2) {
+                            long t1 = o1.getLastMessage().getCreatedAt().getTime();
+                            long t2 = o2.getLastMessage().getCreatedAt().getTime();
+                            if (t1 < t2)
+                                return 1;
+                            else if (t1 > t2)
+                                return -1;
+                            else
+                                return 0;
+                        }
+                    });
                     adapter.setItems(dialogs);
                     show();
                     Provider.getInstance().getDialogsByUserId(MyApplication.getInstance().getUser().getId(),
