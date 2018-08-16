@@ -15,9 +15,11 @@ import online.profsoft.love2gether.MyApplication;
 import online.profsoft.love2gether.R;
 import online.profsoft.love2gether.database.IDrandom;
 import online.profsoft.love2gether.database.Provider;
+import online.profsoft.love2gether.database.ReverseDialog;
 import online.profsoft.love2gether.databinding.ActivityMessageBinding;
 import online.profsoft.love2gether.models.Dialog;
 import online.profsoft.love2gether.models.Message;
+import online.profsoft.love2gether.models.MyDialog;
 import online.profsoft.love2gether.models.User;
 
 public class MessageActivity extends AppCompatActivity {
@@ -34,25 +36,33 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_message);
         adapter = new MessagesListAdapter<>(MyApplication.getInstance().getUser().getId(), null);
+        binding.messagesList.setAdapter(adapter);
         if (getIntent().hasExtra("userID")) {
             id = getIntent().getStringExtra("userID");
             Provider.getInstance().getUser(id, user -> {
                 this.user = user;
             });
-            Provider.getInstance().getDialog(id, MyApplication.getInstance().getUser().getId(),
+            Provider.getInstance().getDialog(id.compareTo(MyApplication.getInstance().getUser().getId()) <= 0 ? id + MyApplication.getInstance().getUser().getId()
+                            :MyApplication.getInstance().getUser().getId() + id,
                     dial -> {
-                        if (dial != null) {
+                        if (dial != null ) {
+                            dialog = ReverseDialog.changeMyDialogInDialog(dial);
                             adapter.addToEnd(dialog.getMessages(), false);
-                            binding.messagesList.setAdapter(adapter);
                         }
+// else
+//                            Provider.getInstance().getDialog( MyApplication.getInstance().getUser().getId() + id,
+//                                    dial2 -> {
+//                                        dialog = ReverseDialog.changeMyDialogInDialog(dial);
+//                                        adapter.addToEnd(dialog.getMessages(), false);
+//                                    });
+
                     });
         } else {
             id = getIntent().getStringExtra("dialogID");
             Provider.getInstance().getDialogID(id,
-                    dial -> {
-                        dialog = dial;
-                        adapter.addToEnd(dialog.getMessages(), false);
-                        binding.messagesList.setAdapter(adapter);
+                    myDialog -> {
+                        dialog = ReverseDialog.changeMyDialogInDialog(myDialog);
+                        adapter.addToEnd(dialog.getMessages(), true);
                     });
         }
         binding.input.setInputListener(new MessageInput.InputListener() {
@@ -66,10 +76,15 @@ public class MessageActivity extends AppCompatActivity {
                     users.add(MyApplication.getInstance().getUser());
                     ArrayList<Message> messages = new ArrayList<>();
                     messages.add(message);
-                    dialog = new Dialog(IDrandom.generateStringID(), user.getAvatar(), user.getName(), users, message, messages, 1, users.get(0).getId(), users.get(1).getId());
-                    Provider.getInstance().setDialog(dialog);
+
+                    dialog = new Dialog(user.getId().compareTo(MyApplication.getInstance().getUser().getId()) <= 0 ? user.getId() + MyApplication.getInstance().getUser().getId()
+                            :MyApplication.getInstance().getUser().getId() + user.getId(),
+                            user.getAvatar(), user.getName(), users, message, messages, 1);
+                    Provider.getInstance().setDialog(ReverseDialog.changeDialogInMyDialog(dialog));
                 } else
-                    Provider.getInstance().setDialog(dialog);
+                    dialog.setLastMessage(message);
+                    dialog.getMessages().add(message);
+                    Provider.getInstance().setDialog(ReverseDialog.changeDialogInMyDialog(dialog));
                 return true;
             }
         });

@@ -2,7 +2,9 @@ package online.profsoft.love2gether.models;
 
 import com.stfalcon.chatkit.commons.models.IUser;
 
-public class User implements IUser {
+import java.io.Serializable;
+
+public class User implements IUser, Serializable {
 
     private String id;
     private String name;
@@ -42,5 +44,14 @@ public class User implements IUser {
     @Override
     public  String  getAvatar () {
         return avatar;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", avatar='" + avatar + '\'' +
+                '}';
     }
 }

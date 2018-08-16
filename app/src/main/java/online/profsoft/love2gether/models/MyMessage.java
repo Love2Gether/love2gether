@@ -1,50 +1,52 @@
 package online.profsoft.love2gether.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.stfalcon.chatkit.commons.models.IMessage;
-
-import java.io.Serializable;
 import java.util.Date;
 
-public class Message implements IMessage{
-
-
+public class MyMessage {
     private String id;
     private String text;
     private User author;
     private Date createdAt;
 
-    public Message() {
+    public MyMessage()  {
     }
 
-    public Message(String id, String text, User author, Date createdAt) {
+    public MyMessage(String id, String text, User author, Date createdAt) {
         this.id = id;
         this.text = text;
         this.author = author;
         this.createdAt = createdAt;
     }
 
-
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getText() {
         return text;
     }
 
-    @Override
-    public User getUser() {
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public User getAuthor() {
         return author;
     }
 
-    @Override
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
 
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 }

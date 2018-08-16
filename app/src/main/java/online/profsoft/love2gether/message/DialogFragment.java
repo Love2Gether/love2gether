@@ -21,73 +21,74 @@ import java.util.Date;
 import online.profsoft.love2gether.MyApplication;
 import online.profsoft.love2gether.R;
 import online.profsoft.love2gether.database.Provider;
+import online.profsoft.love2gether.database.ReverseDialog;
 import online.profsoft.love2gether.databinding.FragmentDialogBinding;
 import online.profsoft.love2gether.models.Dialog;
 import online.profsoft.love2gether.models.Message;
+import online.profsoft.love2gether.models.MyDialog;
 import online.profsoft.love2gether.models.User;
 
 public class DialogFragment extends Fragment {
 
 private FragmentDialogBinding binding;
 private ArrayList<Dialog> dialogs = new ArrayList<>();
+private DialogsListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dialog, container, false);
-//        User user = new User("231", "Леша", "https://www.gstatic.com/webp/gallery/4.sm.jpg");
-////        User user1 = new User("23", "Миша", "https://www.gstatic.com/webp/gallery/5.sm.jpg");
-////        ArrayList<User> users = new ArrayList<>();
-////        users.add(user);
-////        users.add(user1);
-////        Message message = new Message("321", "Hi", user, new Date(600851475143L));
-////        ArrayList<Message> messages = new ArrayList<>();
-////        messages.add(message);
-////        Dialog dialog = new Dialog("123", "https://www.gstatic.com/webp/gallery/1.sm.jpg", "1 dialog", users, message,messages, 1 );
-////        dialogs.add(dialog);
-        DialogsListAdapter adapter = new DialogsListAdapter<>(new ImageLoader() {
+        adapter = new DialogsListAdapter<>(new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, String url) {
                 Picasso.with(binding.getRoot().getContext()).load(url).into(imageView);
             }
         });
+        binding.dialogsList.setAdapter(adapter);
         load();
         Provider.getInstance().getDialogs(MyApplication.getInstance().getUser().getId(),
                 dial-> {
-                    dialogs = dial;
-                    Collections.sort(dialogs, new Comparator<Dialog>() {
-                        @Override
-                        public int compare(Dialog o1, Dialog o2) {
-                            long t1 = o1.getLastMessage().getCreatedAt().getTime();
-                            long t2 = o2.getLastMessage().getCreatedAt().getTime();
-                            if (t1 < t2)
-                                return 1;
-                            else if (t1 > t2)
-                                return -1;
-                            else
-                                return 0;
-                        }
-                    });
+
+            for (MyDialog myDialog : dial) {
+                Dialog dialog = ReverseDialog.changeMyDialogInDialog(myDialog);
+                if (!dialogs.contains(dialog))
+                dialogs.add(dialog);
+            }
+
+//                    Collections.sort(dialogs, new Comparator<Dialog>() {
+//                        @Override
+//                        public int compare(Dialog o1, Dialog o2) {
+//                            long t1 = o1.getLastMessage().getCreatedAt().getTime();
+//                            long t2 = o2.getLastMessage().getCreatedAt().getTime();
+//                            if (t1 < t2)
+//                                return 1;
+//                            else if (t1 > t2)
+//                                return -1;
+//                            else
+//                                return 0;
+//                        }
+//                    });
                     adapter.setItems(dialogs);
                     show();
                     Provider.getInstance().getDialogsByUserId(MyApplication.getInstance().getUser().getId(),
-                            dialogAdd -> {
-                                if (!dialogs.contains(dialogAdd)) {
-                                    dialogs.add(0, dialogAdd);
+                            myDialogAdd -> {
+                                Dialog dialog = ReverseDialog.changeMyDialogInDialog(myDialogAdd);
+                                if (!dialogs.contains(dialog)) {
+                                    dialogs.add(0, dialog);
                                     adapter.setItems(dialogs);
                                 }
-                            }, dialogChange -> {
+                            }, MyDialogChange -> {
                                 for (Dialog d : dialogs)
-                                    if (d.getId().equals(dialogChange.getId())) {
+                                    if (d.getId().equals(MyDialogChange.getId())) {
+                                        Dialog dialog = ReverseDialog.changeMyDialogInDialog(MyDialogChange);
                                         dialogs.remove(d);
-                                        dialogs.add(0, dialogChange);
+                                        dialogs.add(0, dialog);
                                         adapter.setItems(dialogs);
                                         break;
                                     }
                             });
                 });
 
-        binding.dialogsList.setAdapter(adapter);
         adapter.setOnDialogClickListener(new DialogsListAdapter.OnDialogClickListener<Dialog>() {
             @Override
             public void onDialogClick(Dialog dialog) {

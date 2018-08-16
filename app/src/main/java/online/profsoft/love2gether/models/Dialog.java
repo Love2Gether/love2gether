@@ -7,8 +7,10 @@ import com.stfalcon.chatkit.commons.models.IDialog;
 import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.commons.models.IUser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Dialog implements IDialog {
 
@@ -19,8 +21,6 @@ public class Dialog implements IDialog {
     private Message lastMessage;
     private ArrayList<Message> messages;
     private int unreadCount;
-    private String userId1;
-    private String userId2;
 
 
     public Dialog() {
@@ -29,6 +29,7 @@ public class Dialog implements IDialog {
     public ArrayList<Message> getMessages() {
         return messages;
     }
+
 
     public Dialog(String id, String dialogPhoto, String dialogName, ArrayList<User> users, Message lastMessage, ArrayList<Message> messages, int unreadCount) {
         this.id = id;
@@ -40,28 +41,16 @@ public class Dialog implements IDialog {
         this.unreadCount = unreadCount;
     }
 
-    public Dialog(String id, String dialogPhoto, String dialogName, ArrayList<User> users, Message lastMessage, ArrayList<Message> messages, int unreadCount, String userId1, String userId2) {
-        this.id = id;
-        this.dialogPhoto = dialogPhoto;
-        this.dialogName = dialogName;
-        this.users = users;
-        this.lastMessage = lastMessage;
-        this.messages = messages;
-        this.unreadCount = unreadCount;
-        this.userId1 = userId1;
-        this.userId2 = userId2;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setDialogPhoto(String dialogPhoto) {
-        this.dialogPhoto = dialogPhoto;
-    }
-
     public void setDialogName(String dialogName) {
         this.dialogName = dialogName;
+    }
+
+    public void setDialogPhoto(String dialogPhoto) {
+        this.dialogPhoto = dialogPhoto;
     }
 
     public void setUsers(ArrayList<User> users) {
@@ -78,22 +67,6 @@ public class Dialog implements IDialog {
 
     public void setUnreadCount(int unreadCount) {
         this.unreadCount = unreadCount;
-    }
-
-    public String getUserId1() {
-        return userId1;
-    }
-
-    public void setUserId1(String userId1) {
-        this.userId1 = userId1;
-    }
-
-    public String getUserId2() {
-        return userId2;
-    }
-
-    public void setUserId2(String userId2) {
-        this.userId2 = userId2;
     }
 
     @Override
@@ -113,14 +86,13 @@ public class Dialog implements IDialog {
 
     @Override
     public ArrayList<User> getUsers() {
-        return users;
+        return  users;
     }
 
     @Override
-    public Message getLastMessage() {
+    public IMessage getLastMessage() {
         return lastMessage;
     }
-
     @Override
     public void setLastMessage(IMessage lastMessage) {
         this.lastMessage = (Message)lastMessage;
@@ -131,4 +103,17 @@ public class Dialog implements IDialog {
         return unreadCount;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dialog dialog = (Dialog) o;
+        return Objects.equals(id, dialog.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
+    }
 }

@@ -13,6 +13,7 @@ import java.util.Calendar;
 
 import online.profsoft.love2gether.models.Dialog;
 import online.profsoft.love2gether.models.Message;
+import online.profsoft.love2gether.models.MyDialog;
 import online.profsoft.love2gether.models.User;
 
 
@@ -152,13 +153,13 @@ public class Provider {
         database.getReference(USERS + user.getId()).setValue(user);
     }
 
-    public void getDialogs(String userID, FireBaseResponseList<Dialog> dialogFireBaseResponseList) {
-        ArrayList<Dialog> dialogs = new ArrayList<>();
+    public void getDialogs(String userID, FireBaseResponseList<MyDialog> dialogFireBaseResponseList) {
+        ArrayList<MyDialog> dialogs = new ArrayList<>();
         getServerOnce(database.getReference(DIALOGS)
                         .orderByChild("userId1").equalTo(userID),
                 dataSnapshot -> {
                     for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                        dialogs.add(postSnapshot.getValue(Dialog.class));
+                        dialogs.add(postSnapshot.getValue(MyDialog.class));
                     }
                     dialogFireBaseResponseList.onResponse(dialogs);
                 });
@@ -166,67 +167,50 @@ public class Provider {
                         .orderByChild("userId2").equalTo(userID),
                 dataSnapshot -> {
                     for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                        dialogs.add(postSnapshot.getValue(Dialog.class));
+                        dialogs.add(postSnapshot.getValue(MyDialog.class));
                     }
                     dialogFireBaseResponseList.onResponse(dialogs);
                 });
     }
-    public void getDialogID(String dialogId, FireBaseResponse<Dialog> dialogFireBaseResponse) {
+    public void getDialogID(String dialogId, FireBaseResponse<MyDialog> dialogFireBaseResponse) {
         getServerOnce(database.getReference(DIALOGS + dialogId), dataSnapshot -> {
-            dialogFireBaseResponse.onResponse(dataSnapshot.getValue(Dialog.class));
+            dialogFireBaseResponse.onResponse(dataSnapshot.getValue(MyDialog.class));
         });
     }
 
-    public void getDialog(String userID1, String userID2 , FireBaseResponse<Dialog> dialogFireBaseResponseList) {
-        getServerOnce(database.getReference(DIALOGS)
-                        .orderByChild("userId1").equalTo(userID1),
+    public void getDialog(String ID, FireBaseResponse<MyDialog> dialogFireBaseResponseList) {
+        getServerOnce(database.getReference(DIALOGS + ID),
                 dataSnapshot -> {
-                    dialogFireBaseResponseList.onResponse (dataSnapshot.getValue(Dialog.class));
+                    dialogFireBaseResponseList.onResponse (dataSnapshot.getValue(MyDialog.class));
 
-                });
-        getServerOnce(database.getReference(DIALOGS)
-                        .orderByChild("userId2").equalTo(userID2),
-                dataSnapshot -> {
-                    dialogFireBaseResponseList.onResponse (dataSnapshot.getValue(Dialog.class));
-                });
-        getServerOnce(database.getReference(DIALOGS)
-                        .orderByChild("userId1").equalTo(userID2),
-                dataSnapshot -> {
-                    dialogFireBaseResponseList.onResponse (dataSnapshot.getValue(Dialog.class));
-
-                });
-        getServerOnce(database.getReference(DIALOGS)
-                        .orderByChild("userId2").equalTo(userID1),
-                dataSnapshot -> {
-                    dialogFireBaseResponseList.onResponse (dataSnapshot.getValue(Dialog.class));
                 });
     }
 
-    public void setDialog(Dialog dialog) {
+    public void setDialog(MyDialog dialog) {
         database.getReference(DIALOGS + dialog.getId()).setValue(dialog);
     }
 
-    public void getDialogsByUserId(String userID, FireBaseResponse<Dialog> dialogAdd, FireBaseResponse<Dialog> dialogChange) {
+    public void getDialogsByUserId(String userID, FireBaseResponse<MyDialog> dialogAdd, FireBaseResponse<MyDialog> dialogChange) {
 
         getServerAddChildListener(
                 database.getReference(DIALOGS)
                         .orderByChild("userId1").equalTo(userID),
                 dataSnapshotAdd -> {
-                    dialogAdd.onResponse(dataSnapshotAdd.getValue(Dialog.class));
+                    dialogAdd.onResponse(dataSnapshotAdd.getValue(MyDialog.class));
                 },
                 dataSnapshotChange -> {
-                    dialogChange.onResponse(dataSnapshotChange.getValue(Dialog.class));
+                    dialogChange.onResponse(dataSnapshotChange.getValue(MyDialog.class));
 
                 });
         getServerAddChildListener(
                 database.getReference(DIALOGS)
                         .orderByChild("userId2").equalTo(userID),
                 dataSnapshotAdd -> {
-                    Dialog dialog = dataSnapshotAdd.getValue(Dialog.class);
+                    MyDialog dialog = dataSnapshotAdd.getValue(MyDialog.class);
                     dialogAdd.onResponse(dialog);
                 },
                 dataSnapshotChange -> {
-                    Dialog dialog = dataSnapshotChange.getValue(Dialog.class);
+                    MyDialog dialog = dataSnapshotChange.getValue(MyDialog.class);
                     dialogChange.onResponse(dialog);
                 });
     }
