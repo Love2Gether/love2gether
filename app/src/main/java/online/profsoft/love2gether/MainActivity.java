@@ -41,12 +41,14 @@ public class MainActivity extends AppCompatActivity {
        // binding.navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(null, R.drawable.ic_swipecard, R.color.colorWhite);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(null, R.drawable.ic_chat, R.color.colorWhite);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(null, R.drawable.ic_profile,R.color.colorWhite);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(null, R.drawable.ic_notifications, R.color.colorWhite);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(null, R.drawable.ic_chat, R.color.colorWhite);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem(null, R.drawable.ic_profile,R.color.colorWhite);
 
         binding.bottomNavigation.addItem(item1);
         binding.bottomNavigation.addItem(item2);
         binding.bottomNavigation.addItem(item3);
+        binding.bottomNavigation.addItem(item4);
         binding.bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
 
 
