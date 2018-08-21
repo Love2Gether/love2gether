@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bottom_navigation_low_height">46dp</dimen>
+    <dimen name="bottom_navigation_small_margin_bottom">9dp</dimen>
+    <dimen name="bottom_navigation_small_margin_top">9dp</dimen>
+    <dimen name="bottom_navigation_icon">30dp</dimen>
+</resources>
