@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import online.profsoft.love2gether.MainActivity;
 import online.profsoft.love2gether.MyApplication;
+import online.profsoft.love2gether.R;
 import online.profsoft.love2gether.database.Provider;
 import online.profsoft.love2gether.login.LoginActivity;
 import online.profsoft.love2gether.login.RegistryActivity;
@@ -17,6 +18,7 @@ public class StartActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_start);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser == null) {
